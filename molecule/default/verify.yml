@@ -6,7 +6,7 @@
     - name: get package insatll states
       package:
         name: nodejs
-        state: installed
+        state: present
       check_mode: true
       register: result
     - name: assert nodejs installed
@@ -22,6 +22,6 @@
       include_vars: "{{ molecule_scenario_directory | dirname | dirname }}/defaults/main.yml"
     - name: assert install version
       assert:
-        that: result.stdout.split('.') | first | regex_replace('^v', '') | int == nodejs_major_version
-        fail_msg: "「nodejs」のバージョンは「{{ nodejs_major_version }}」ではありません"
-        success_msg: "「nodejs」のバージョンは「{{ nodejs_major_version }}」です"
+        that: result.stdout.split('.') | first | regex_replace('^v', '') | int == nodejs_version
+        fail_msg: "「nodejs」のバージョンは「{{ nodejs_version }}」ではありません"
+        success_msg: "「nodejs」のバージョンは「{{ nodejs_version }}」です"
