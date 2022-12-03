@@ -1,23 +1,25 @@
 nodejs
-=========
+=================
 
-[![Build Status](https://travis-ci.org/wate/ansible-role-nodejs.svg?branch=master)](https://travis-ci.org/wate/ansible-role-nodejs)
+Install node.js
 
-Node.jsをインストールします
+OS Platform
+-----------------
+
+### Debian
+
+- bullseye
+- buster
 
 Role Variables
 --------------
 
-### nodejs_major_version
+### `nodejs_version`
 
-インストールするNode.jsのメジャーバージョンを指定します
-
-```yaml
-nodejs_version: 12
-```
+Node.jsのバージョン
 
 Example Playbook
-----------------
+--------------
 
 ```yaml
 - hosts: servers
@@ -26,6 +28,6 @@ Example Playbook
 ```
 
 License
--------
+--------------
 
 Apache License 2.0

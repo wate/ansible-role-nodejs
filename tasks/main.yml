@@ -6,6 +6,6 @@
   ansible.builtin.apt:
     name: nodejs
 - name: install yarn
-  npm:
+  community.general.npm:
     name: yarn
     global: true
