@@ -1,30 +1,33 @@
 ---
 - name: Verify
   hosts: all
-  gather_facts: true
+  gather_facts: false
   check_mode: true
+  become: true
   tasks:
-    - name: Test apt signing key
-      ansible.builtin.apt_key:
-        url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
-        state: present
-      register: result
-    - name: Assert apt signing key
-      ansible.builtin.assert:
-        that: result is not changed
-    - name: Test repository
-      ansible.builtin.apt_repository:
-        filename: influxdb
-        repo: deb https://deb.nodesource.com/node_16.x {{ ansible_facts.distribution_release }} main
-        state: present
+    - name: Check repository file
+      ansible.builtin.stat:
+        path: //etc/apt/sources.list.d/nodesource.list
       register: result
     - name: Assert repository
       ansible.builtin.assert:
-        that: result is not changed
-    - name: Test package
-      ansible.builtin.apt:
-        name: nodejs
-      register: result
+        that:
+          - result.stat.exists
+    ## パッケージのテスト
+    - name: Gather the package facts
+      ansible.builtin.package_facts:
+        manager: auto
     - name: Assert package
       ansible.builtin.assert:
-        that: result is not changed
+        that:
+          - ansible_facts.packages['nodejs']
+          - ansible_facts.packages['nodejs'][0]['version'].startswith('16.')
+    # yarnのテスト
+    - name: Check yarn command
+      ansible.builtin.stat:
+        path: /usr/bin/yarn
+      register: result
+    - name: Assert file
+      ansible.builtin.assert:
+        that:
+          - result.stat.exists
