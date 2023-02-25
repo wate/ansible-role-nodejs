@@ -1,11 +1,11 @@
 ---
-- name: Add repository
-  ansible.builtin.import_tasks: repository.yml
-  tags: repository
-- name: Install node.js
-  ansible.builtin.apt:
-    name: nodejs
-- name: Install yarn
-  community.general.npm:
-    name: yarn
-    global: true
+- name: Import repository task
+  ansible.builtin.import_tasks:
+    file: repository.yml
+  tags:
+    - role_nodejs_repository
+- name: Import package task
+  ansible.builtin.import_tasks:
+    file: package.yml
+  tags:
+    - role_nodejs_package
