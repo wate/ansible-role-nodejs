@@ -1,0 +1,3 @@
+---
+nodejs_apt_key_url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+nodejs_apt_key_dest: /usr/share/keyrings/nodesource.gpg.key

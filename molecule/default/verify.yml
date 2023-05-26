@@ -22,7 +22,7 @@
       ansible.builtin.assert:
         that:
           - ansible_facts.packages['nodejs']
-          - ansible_facts.packages['nodejs'][0]['version'].startswith('16.')
+          - ansible_facts.packages['nodejs'][0]['version'].startswith('18.')
     # yarnコマンドのテスト
     - name: Check yarn command
       ansible.builtin.stat:
