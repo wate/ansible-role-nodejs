@@ -20,6 +20,14 @@ Role Variables
 
 Node.jsのバージョン
 
+### `nodejs_global_install_yarn`
+
+yarnのグローバルインストール
+
+### `nodejs_global_install_pnpm`
+
+pnpmのグローバルインストール
+
 Example Playbook
 --------------
 

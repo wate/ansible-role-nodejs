@@ -5,4 +5,12 @@
 - name: Install yarn
   community.general.npm:
     name: yarn
+    version: "{{ nodejs_global_install_yarn_version | default(omit) }}"
     global: true
+  when: nodejs_global_install_yarn
+- name: Install pnpm
+  community.general.npm:
+    name: pnpm
+    version: "{{ nodejs_global_install_pnpm_version | default(omit) }}"
+    global: true
+  when: nodejs_global_install_pnpm

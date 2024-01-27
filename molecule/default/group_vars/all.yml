@@ -1,0 +1,3 @@
+---
+nodejs_global_install_yarn: true
+nodejs_global_install_pnpm: true

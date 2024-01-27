@@ -3,3 +3,23 @@
 ## Node.jsのバージョン
 ## -----------------
 nodejs_version: 20
+
+## -----------------
+## yarnのグローバルインストール
+## -----------------
+nodejs_global_install_yarn: false
+
+## -----------------
+## グローバルインストールするyaenのバージョン
+## -----------------
+# nodejs_global_install_yarn_version: latest
+
+## -----------------
+## pnpmのグローバルインストール
+## -----------------
+nodejs_global_install_pnpm: false
+
+## -----------------
+## グローバルインストールするpnpmのバージョン
+## -----------------
+# nodejs_global_install_pnpm_version: latest

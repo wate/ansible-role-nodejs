@@ -22,7 +22,17 @@
       ansible.builtin.assert:
         that:
           - ansible_facts.packages['nodejs']
-          - ansible_facts.packages['nodejs'][0]['version'].startswith('18.')
+          - ansible_facts.packages['nodejs'][0]['version'].startswith('20.')
+    # npmコマンドのテスト
+    - name: Check npm command
+      ansible.builtin.stat:
+        path: /usr/bin/npm
+      register: result
+    - name: Assert file
+      ansible.builtin.assert:
+        that:
+          - result.stat.exists
+          - result.stat.executable
     # yarnコマンドのテスト
     - name: Check yarn command
       ansible.builtin.stat:
@@ -32,3 +42,14 @@
       ansible.builtin.assert:
         that:
           - result.stat.exists
+          - result.stat.executable
+    # pnpmコマンドのテスト
+    - name: Check pnpm command
+      ansible.builtin.stat:
+        path: /usr/bin/pnpm
+      register: result
+    - name: Assert file
+      ansible.builtin.assert:
+        that:
+          - result.stat.exists
+          - result.stat.executable
