@@ -14,19 +14,31 @@ OS Platform
 Role Variables
 --------------
 
-設定方法の詳細については[defaults/main.yml](defaults/main.yml)のサンプルコードを参照してください。
+### [defaults/main.yml](defaults/main.yml)
 
-### `nodejs_version`
+設定方法の詳細については[defaults/main.yml](defaults/main.yml)のサンプルコードなどを参照してください。
+
+#### `nodejs_version`
 
 Node.jsのバージョン
 
-### `nodejs_global_install_yarn`
+#### `nodejs_global_install_yarn`
 
 yarnのグローバルインストール
 
-### `nodejs_global_install_pnpm`
+#### `nodejs_global_install_pnpm`
 
 pnpmのグローバルインストール
+
+### [vars/main.yml](vars/main.yml)
+
+設定値については[vars/main.yml](vars/main.yml)を参照してください。
+
+#### `nodejs_apt_key_url`
+
+#### `nodejs_apt_key_download_dest`
+
+#### `nodejs_apt_key_dest`
 
 Example Playbook
 --------------
