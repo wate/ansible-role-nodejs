@@ -5,6 +5,8 @@
   ansible.builtin.apt:
     update_cache: true
     name:
+      - python3-apt
+      - python3-debian
       - apt-transport-https
       - ca-certificates
       - curl
@@ -33,10 +35,20 @@
   ansible.builtin.set_fact:
     nodejs_arch: "{{ dpkg_result.stdout }}"
 - name: Add nodesource repository
-  ansible.builtin.apt_repository:
-    filename: nodesource
-    repo: deb [arch={{ nodejs_arch }} signed-by={{ nodejs_apt_key_dest }}] https://deb.nodesource.com/node_{{ nodejs_version }}.x nodistro main
+  ansible.builtin.deb822_repository:
+    name: nodesource
+    uris: https://deb.nodesource.com/node_{{ nodejs_version }}.x
+    suites: nodistro
+    components: main
+    architectures: "{{ nodejs_arch }}"
+    signed_by: "{{ nodejs_apt_key_dest }}"
+    enabled: true
     state: present
+  register: apt_repository_result
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: true
+  when: apt_repository_result is changed
 - name: Add Nodejs apt Config
   ansible.builtin.copy:
     src: apt/preferences.d/nodejs

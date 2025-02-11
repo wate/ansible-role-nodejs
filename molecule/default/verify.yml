@@ -8,12 +8,12 @@
     ## リポジトリのテスト
     - name: Check repository file
       ansible.builtin.stat:
-        path: //etc/apt/sources.list.d/nodesource.list
-      register: result
+        path: //etc/apt/sources.list.d/nodesource.sources
+      register: nodesource_repo_result
     - name: Assert repository
       ansible.builtin.assert:
         that:
-          - result.stat.exists
+          - nodesource_repo_result.stat.exists
     ## パッケージのテスト
     - name: Gather the package facts
       ansible.builtin.package_facts:
@@ -22,34 +22,34 @@
       ansible.builtin.assert:
         that:
           - ansible_facts.packages['nodejs']
-          - ansible_facts.packages['nodejs'][0]['version'].startswith('20.')
+          - ansible_facts.packages['nodejs'][0]['version'].startswith('22.')
     # npmコマンドのテスト
     - name: Check npm command
       ansible.builtin.stat:
         path: /usr/bin/npm
-      register: result
+      register: npm_command_result
     - name: Assert file
       ansible.builtin.assert:
         that:
-          - result.stat.exists
-          - result.stat.executable
+          - npm_command_result.stat.exists
+          - npm_command_result.stat.executable
     # yarnコマンドのテスト
     - name: Check yarn command
       ansible.builtin.stat:
         path: /usr/bin/yarn
-      register: result
+      register: yarn_command_result
     - name: Assert file
       ansible.builtin.assert:
         that:
-          - result.stat.exists
-          - result.stat.executable
+          - yarn_command_result.stat.exists
+          - yarn_command_result.stat.executable
     # pnpmコマンドのテスト
     - name: Check pnpm command
       ansible.builtin.stat:
         path: /usr/bin/pnpm
-      register: result
+      register: pnpm_command_result
     - name: Assert file
       ansible.builtin.assert:
         that:
-          - result.stat.exists
-          - result.stat.executable
+          - pnpm_command_result.stat.exists
+          - pnpm_command_result.stat.executable

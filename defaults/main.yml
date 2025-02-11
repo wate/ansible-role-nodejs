@@ -2,7 +2,7 @@
 ## -----------------
 ## Node.jsのバージョン
 ## -----------------
-nodejs_version: 20
+nodejs_version: 22
 
 ## -----------------
 ## yarnのグローバルインストール
@@ -10,7 +10,7 @@ nodejs_version: 20
 nodejs_global_install_yarn: false
 
 ## -----------------
-## グローバルインストールするyaenのバージョン
+## グローバルインストールするyarnのバージョン
 ## -----------------
 # nodejs_global_install_yarn_version: latest
 
