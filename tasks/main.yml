@@ -2,10 +2,8 @@
 - name: Import repository task
   ansible.builtin.import_tasks:
     file: repository.yml
-  tags:
-    - role_nodejs_repository
+  tags: role_nodejs_repository
 - name: Import package task
   ansible.builtin.import_tasks:
     file: package.yml
-  tags:
-    - role_nodejs_package
+  tags: role_nodejs_package
