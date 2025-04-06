@@ -34,6 +34,34 @@
 - name: Set arch variables
   ansible.builtin.set_fact:
     nodejs_arch: "{{ dpkg_result.stdout }}"
+- name: Set Install version variable
+  when: nodejs_version in ['current', 'latest', 'lts']
+  block:
+    - name: Set Github API request header
+      ansible.builtin.set_fact:
+        github_api_request_headers:
+          Accept: application/vnd.github+json
+    - name: Merge Github API Authorization request header
+      ansible.builtin.set_fact:
+        github_api_request_headers: "{{ github_api_request_headers | combine(merge_request_header) }}"
+      vars:
+        merge_request_header:
+          Authorization: Bearer {{ lookup('env', 'GITHUB_TOKEN') }}
+      when: lookup('env', 'GITHUB_TOKEN') | length > 0
+    - name: Get latest release
+      ansible.builtin.uri:
+        url: https://api.github.com/repos/nodejs/node/releases/latest
+        headers: "{{ github_api_request_headers }}"
+      register: latest_release
+    - name: Set latest version variable
+      ansible.builtin.set_fact:
+        nodejs_latest_version: "{{ ((latest_release.json.tag_name | split('.'))[0])[1:] }}"
+    - name: Set lts version variable
+      ansible.builtin.set_fact:
+        nodejs_lts_version: "{{ nodejs_latest_version | int // 2 * 2 }}"
+    - name: Set package version
+      ansible.builtin.set_fact:
+        nodejs_version: "{{ (nodejs_version == 'lts') | ternary(nodejs_lts_version, nodejs_latest_version) }}"
 - name: Add nodesource repository
   ansible.builtin.deb822_repository:
     name: nodesource
