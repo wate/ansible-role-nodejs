@@ -6,3 +6,4 @@ dpkg
 envrc
 keyrings
 nodistro
+startswith
