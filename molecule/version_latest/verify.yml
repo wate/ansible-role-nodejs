@@ -1,0 +1,16 @@
+---
+- name: Verify
+  hosts: all
+  gather_facts: false
+  check_mode: true
+  become: true
+  tasks:
+    ## パッケージのテスト
+    - name: Gather the package facts
+      ansible.builtin.package_facts:
+        manager: auto
+    - name: Assert package
+      ansible.builtin.assert:
+        that:
+          - ansible_facts.packages['nodejs']
+          - ansible_facts.packages['nodejs'][0]['version'].startswith('23.')
