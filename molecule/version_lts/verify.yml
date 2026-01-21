@@ -12,5 +12,5 @@
     - name: Assert package
       ansible.builtin.assert:
         that:
-          - ansible_facts.packages['nodejs']
-          - ansible_facts.packages['nodejs'][0]['version'].startswith('22.')
+          - ansible_facts.packages['nodejs'] is defined
+          - ansible_facts.packages['nodejs'][0]['version'].startswith('24.')
