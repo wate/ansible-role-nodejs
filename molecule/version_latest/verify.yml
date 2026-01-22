@@ -4,7 +4,23 @@
   gather_facts: false
   check_mode: true
   become: true
+  vars:
+    node_version: 25
   tasks:
+    ## Node.js バージョン情報の取得
+    - name: Fetch Node.js lifecycle info
+      ansible.builtin.uri:
+        url: https://endoflife.date/api/v1/products/nodejs
+        return_content: true
+      register: node_release_response
+      changed_when: false
+      check_mode: false
+    - name: Set node lifecycle facts
+      ansible.builtin.set_fact:
+        node_releases: "{{ node_release_response.json }}"
+    - name: Set node_version from latest release
+      ansible.builtin.set_fact:
+        node_version: "{{ (node_releases | list | first).cycle | default(node_version, true) }}"
     ## パッケージのテスト
     - name: Gather the package facts
       ansible.builtin.package_facts:
@@ -13,4 +29,6 @@
       ansible.builtin.assert:
         that:
           - ansible_facts.packages['nodejs'] is defined
-          - ansible_facts.packages['nodejs'][0]['version'].startswith('25.')
+          - ansible_facts.packages['nodejs'][0]['version'].startswith((node_version | string) ~ '.')
+        fail_msg: "nodejs v{{ node_version }} is not installed"
+        success_msg: "nodejs v{{ node_version }} is installed"
