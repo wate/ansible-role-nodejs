@@ -4,7 +4,23 @@
   gather_facts: false
   check_mode: true
   become: true
+  vars:
+    node_version: 24
   tasks:
+    ## Node.js バージョン情報の取得
+    - name: Fetch Node.js lifecycle info
+      ansible.builtin.uri:
+        url: https://endoflife.date/api/v1/products/nodejs
+        return_content: true
+      register: node_release_response
+      changed_when: false
+      check_mode: false
+    - name: Set node lifecycle facts
+      ansible.builtin.set_fact:
+        node_releases: "{{ node_release_response.json }}"
+    - name: Set node_version from latest LTS
+      ansible.builtin.set_fact:
+        node_version: "{{ (node_releases | selectattr('lts', '==', true) | list | first).cycle | default(node_version, true) }}"
     ## リポジトリのテスト
     - name: Check repository file
       ansible.builtin.stat:
@@ -14,6 +30,8 @@
       ansible.builtin.assert:
         that:
           - nodesource_repo_result.stat.exists
+        fail_msg: "NodeSource repository file is missing"
+        success_msg: "NodeSource repository file exists"
     ## パッケージのテスト
     - name: Gather the package facts
       ansible.builtin.package_facts:
@@ -22,7 +40,9 @@
       ansible.builtin.assert:
         that:
           - ansible_facts.packages['nodejs'] is defined
-          - ansible_facts.packages['nodejs'][0]['version'].startswith('24.')
+          - ansible_facts.packages['nodejs'][0]['version'].startswith((node_version | string) ~ '.')
+        fail_msg: "nodejs v{{ node_version }} is not installed"
+        success_msg: "nodejs v{{ node_version }} is installed"
     # npmコマンドのテスト
     - name: Check npm command
       ansible.builtin.stat:
@@ -33,6 +53,8 @@
         that:
           - npm_command_result.stat.exists
           - npm_command_result.stat.executable
+        fail_msg: "npm command is missing or not executable"
+        success_msg: "npm command is present and executable"
     # yarnコマンドのテスト
     - name: Check yarn command
       ansible.builtin.stat:
@@ -43,6 +65,8 @@
         that:
           - yarn_command_result.stat.exists
           - yarn_command_result.stat.executable
+        fail_msg: "yarn command is missing or not executable"
+        success_msg: "yarn command is present and executable"
     # pnpmコマンドのテスト
     - name: Check pnpm command
       ansible.builtin.stat:
@@ -53,3 +77,5 @@
         that:
           - pnpm_command_result.stat.exists
           - pnpm_command_result.stat.executable
+        fail_msg: "pnpm command is missing or not executable"
+        success_msg: "pnpm command is present and executable"

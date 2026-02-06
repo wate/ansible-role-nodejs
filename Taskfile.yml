@@ -1,0 +1,41 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: '3'
+tasks:
+  notify:
+    internal: true
+    silent: true
+    cmds:
+      - afplay /System/Library/Sounds/Glass.aiff
+  notify:all:
+    internal: true
+    silent: true
+    cmds:
+      - afplay /System/Library/Sounds/Hero.aiff
+  default:
+    desc: Run Molecule tests for default scenario
+    cmds:
+      - molecule test
+      - task: notify
+  version_current:
+    desc: Run Molecule tests for version_current scenario
+    cmds:
+      - molecule test -s version_current
+      - task: notify
+  version_latest:
+    desc: Run Molecule tests for version_latest scenario
+    cmds:
+      - molecule test -s version_latest
+      - task: notify
+  version_lts:
+    desc: Run Molecule tests for version_lts scenario
+    cmds:
+      - molecule test -s version_lts
+      - task: notify
+  all:
+    desc: Run Molecule tests for all scenarios (sequential)
+    cmds:
+      - task: default
+      - task: version_current
+      - task: version_latest
+      - task: version_lts
+      - task: notify:all
