@@ -5,7 +5,7 @@
   check_mode: true
   become: true
   vars:
-    node_version: 25
+    node_version: 26
   tasks:
     ## Node.js バージョン情報の取得
     - name: Fetch Node.js lifecycle info
